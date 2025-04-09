@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "eslint --config config/eslint.config.mjs ."
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@netlify/plugin-nextjs": "^5.10.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

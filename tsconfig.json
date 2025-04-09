@@ -24,9 +24,28 @@
       "@lib/*": ["./src/lib/*"],
       "@styles/*": ["./src/styles/*"],
       "@utils/*": ["./src/utils/*"],
-      "@types/*": ["./src/types/*"]
-    }
+      "@types/*": ["./deploy/next/types/*"]
+    },
+    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./deploy/next/types"],
+    "types": ["node", "react", "next"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "deploy/next/types/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "deploy/node_modules"
+  ],
+  "references": [
+    {
+      "path": "./deploy"
+    }
+  ]
 }

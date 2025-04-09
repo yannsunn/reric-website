@@ -1,49 +1,54 @@
 "use client";
 
-import { motion, Variants, domAnimation, LazyMotion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 interface AnimatedNavItemProps {
-  children: ReactNode;
   href: string;
+  children: ReactNode;
   className?: string;
-  delay?: number;
+  external?: boolean;
 }
 
-const navItemVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: -10,
-  },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      delay: delay * 0.1,
-    },
-  }),
-};
+export const AnimatedNavItem: FC<AnimatedNavItemProps> = ({ href, children, className = '', external = false }) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const element = document.getElementById(href.slice(1));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
-export default function AnimatedNavItem({
-  children,
-  href,
-  className = '',
-  delay = 0,
-}: AnimatedNavItemProps) {
-  return (
-    <LazyMotion features={domAnimation}>
-      <motion.li
-        custom={delay}
-        initial="hidden"
-        animate="visible"
-        variants={navItemVariants}
-        whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-      >
-        <a href={href} className={className}>
-          {children}
-        </a>
-      </motion.li>
-    </LazyMotion>
+  const content = (
+    <motion.span
+      className={`inline-block ${className}`}
+      whileHover={{ y: -2 }}
+      whileTap={{ y: 0 }}
+    >
+      {children}
+    </motion.span>
   );
-} 
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" onClick={handleClick}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <motion.li
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Link href={href} className={className} onClick={handleClick}>
+        {content}
+      </Link>
+    </motion.li>
+  );
+}; 
