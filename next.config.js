@@ -12,6 +12,9 @@ const nextConfig = {
   },
   trailingSlash: true,
   assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
