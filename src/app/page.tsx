@@ -5,7 +5,7 @@ import AnimatedSection from "../components/AnimatedSection";
 import AnimatedHeader from "../components/AnimatedHeader";
 import AnimatedImage from "../components/AnimatedImage";
 import { AnimatedNavItem } from "../components/AnimatedNavItem";
-import AnimatedCard from "../components/AnimatedCard";
+import { AnimatedCard } from "../components/AnimatedCard";
 import AnimatedButton from "../components/AnimatedButton";
 
 export default function Home() {
@@ -247,6 +247,11 @@ export default function Home() {
                   <a href="#contact" className="text-gray-400 hover:text-white transition-colors">
                     お問い合わせ
                   </a>
+                </li>
+                <li>
+                  <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">
+                    プライバシーポリシー
+                  </Link>
                 </li>
               </ul>
             </div>
