@@ -2,11 +2,13 @@
 
 import { motion, Variants, domAnimation, LazyMotion, useReducedMotion } from 'framer-motion';
 import { ReactNode, Component, ErrorInfo } from 'react';
+import { FC } from 'react';
 
 interface AnimatedCardProps {
-  children: ReactNode;
+  title: string;
+  description: string;
+  icon: string;
   className?: string;
-  delay?: number;
 }
 
 interface ErrorBoundaryState {
@@ -61,11 +63,12 @@ const cardVariants: Variants = {
   },
 };
 
-export default function AnimatedCard({
-  children,
+export const AnimatedCard: FC<AnimatedCardProps> = ({
+  title,
+  description,
+  icon,
   className = '',
-  delay = 0,
-}: AnimatedCardProps) {
+}) => {
   const shouldReduceMotion = useReducedMotion();
 
   const reducedMotionVariants: Variants = {
@@ -83,17 +86,16 @@ export default function AnimatedCard({
     <AnimationErrorBoundary>
       <LazyMotion features={domAnimation}>
         <motion.div
-          custom={delay}
-          initial="hidden"
-          animate="visible"
-          whileHover="hover"
-          variants={shouldReduceMotion ? reducedMotionVariants : cardVariants}
-          className={className}
-          aria-live="polite"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className={`bg-white p-8 rounded-2xl shadow-lg ${className}`}
         >
-          {children}
+          <div className="text-4xl mb-6 text-center">{icon}</div>
+          <h3 className="text-2xl font-bold mb-4 text-center text-gray-800">{title}</h3>
+          <p className="text-gray-600 leading-relaxed">{description}</p>
         </motion.div>
       </LazyMotion>
     </AnimationErrorBoundary>
   );
-} 
+}; 
