@@ -1,0 +1,13 @@
+<svg width="400" height="250" viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#f3f4f6" />
+  <rect x="100" y="60" width="60" height="60" fill="#ffffff" stroke="#0056b3" stroke-width="2" />
+  <rect x="170" y="60" width="60" height="60" fill="#ffffff" stroke="#0056b3" stroke-width="2" />
+  <rect x="240" y="60" width="60" height="60" fill="#ffffff" stroke="#0056b3" stroke-width="2" />
+  <rect x="135" y="130" width="130" height="60" fill="#ffffff" stroke="#0056b3" stroke-width="2" />
+  <path d="M130 60 L130 40 L240 40 L270 40" stroke="#0056b3" stroke-width="2" />
+  <path d="M200 130 L200 120" stroke="#0056b3" stroke-width="2" />
+  <circle cx="200" cy="160" r="20" fill="#e6f0ff" stroke="#0056b3" stroke-width="1" />
+  <text x="200" y="210" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">
+    倉庫・物流イメージ
+  </text>
+</svg> 
