@@ -1,5 +1,8 @@
+"use client";
+
 import { motion, Variants, domAnimation, LazyMotion } from 'framer-motion';
 import { ReactNode } from 'react';
+import React from 'react';
 
 interface AnimatedHeaderProps {
   children: ReactNode;
@@ -27,7 +30,7 @@ export default function AnimatedHeader({
   className = '', 
   level = 2 
 }: AnimatedHeaderProps) {
-  const HeaderTag = `h${level}` as keyof JSX.IntrinsicElements;
+  const HeaderTag = `h${level}` as keyof React.JSX.IntrinsicElements;
 
   return (
     <LazyMotion features={domAnimation}>

@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, Variants, domAnimation, LazyMotion } from 'framer-motion';
 
@@ -28,6 +30,7 @@ export default function AnimatedSection({ children, className = '', delay = 0 }:
   const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
+    const currentRef = ref.current;
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
@@ -43,13 +46,13 @@ export default function AnimatedSection({ children, className = '', delay = 0 }:
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [controls, delay, hasAnimated]);

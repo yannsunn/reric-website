@@ -1,11 +1,12 @@
-<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="400" fill="#f3f4f6" />
-  <g transform="translate(275, 100)">
-    <circle cx="50" cy="50" r="40" fill="#0056b3" opacity="0.8" />
-    <circle cx="100" cy="100" r="40" fill="#6c757d" opacity="0.8" />
-    <circle cx="150" cy="50" r="40" fill="#ffc107" opacity="0.8" />
-    <text x="50" y="200" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333" text-anchor="middle">
-      信頼と満足の追求
-    </text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400" fill="none">
+  <rect width="800" height="400" fill="url(#paint0_linear)" />
+  <path d="M0 380 Q200 280 400 350 Q600 300 800 380 L800 400 L0 400 Z" fill="#1E40AF" opacity="0.7" />
+  <circle cx="200" cy="150" r="50" fill="#3050F0" opacity="0.2" />
+  <circle cx="600" cy="200" r="80" fill="#3050F0" opacity="0.2" />
+  <defs>
+    <linearGradient id="paint0_linear" x1="400" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E40AF" />
+      <stop offset="1" stop-color="#3050F0" />
+    </linearGradient>
+  </defs>
 </svg> 

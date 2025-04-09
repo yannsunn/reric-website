@@ -1,4 +1,5 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
 import AnimatedSection from "../components/AnimatedSection";
 import AnimatedHeader from "../components/AnimatedHeader";

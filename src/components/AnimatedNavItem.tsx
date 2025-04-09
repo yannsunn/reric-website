@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, Variants, domAnimation, LazyMotion } from 'framer-motion';
 import { ReactNode } from 'react';
 

@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# reric-website
 
-## Getting Started
+Next.jsを使用した静的Webサイト
 
-First, run the development server:
+## プロジェクト構造
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+reric-website/
+├── src/              # アプリケーションのソースコード
+│   ├── app/         # Next.jsアプリケーションルート
+│   ├── components/  # 再利用可能なコンポーネント
+│   ├── lib/        # 外部サービス連携やビジネスロジック
+│   ├── styles/     # グローバルスタイルとテーマ
+│   ├── types/      # TypeScript型定義
+│   └── utils/      # ユーティリティ関数
+├── docs/            # プロジェクトドキュメント
+│   ├── architecture/ # アーキテクチャ設計文書
+│   ├── api/        # API仕様書
+│   └── deployment/ # デプロイメントガイド
+└── public/         # 静的アセット
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 開発環境のセットアップ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# 依存関係のインストール
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 開発サーバーの起動
+npm run dev
 
-## Learn More
+# ビルド
+npm run build
 
-To learn more about Next.js, take a look at the following resources:
+# 静的ファイルの生成
+npm run export
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## コーディング規約
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **コンポーネント設計**
+   - Atomic Designパターンに従う
+   - コンポーネントは`src/components`に配置
+   - 各コンポーネントは独自のディレクトリを持つ
 
-## Deploy on Vercel
+2. **型定義**
+   - 厳格な型チェックを有効化
+   - 共有の型定義は`src/types`に配置
+   - コンポーネント固有の型は各コンポーネントディレクトリに配置
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **スタイリング**
+   - TailwindCSSを使用
+   - グローバルスタイルは`src/styles`に配置
+   - コンポーネント固有のスタイルは各コンポーネントと同じ場所に配置
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **パフォーマンス**
+   - 画像の最適化
+   - コンポーネントの適切な分割
+   - 不要なレンダリングの防止
+
+## 環境変数
+
+開発時は`.env.local`ファイルを作成し、以下の変数を設定してください：
+
+```env
+NEXT_PUBLIC_BASE_PATH=
+```
+
+## デプロイメント
+
+デプロイメントの詳細は[デプロイメントガイド](./docs/deployment/README.md)を参照してください。
+
+## ドキュメント
+
+- [アーキテクチャ設計](./docs/architecture/README.md)
+- [API仕様書](./docs/api/README.md)
+- [デプロイメントガイド](./docs/deployment/README.md)
