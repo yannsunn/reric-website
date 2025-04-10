@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   AnimatedSection,
@@ -10,8 +12,15 @@ import Image from "next/image";
 import HeaderNav from '@/components/HeaderNav';
 import MobileMenu from '@/components/MobileMenu';
 import ContactForm from '../components/ContactForm';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50">
       {/* ヘッダー */}
@@ -66,79 +75,89 @@ export default function Home() {
             <span className="block text-xl md:text-2xl mt-3 md:mt-4 text-gray-700">事業内容</span>
           </AnimatedHeader>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-6xl mx-auto">
-            <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-primary hover:-translate-y-2">
-              <div className="relative h-48 overflow-hidden">
-                <AnimatedImage
-                  src="/images/business/retail.jpg"
-                  alt="小売業"
-                  width={600}
-                  height={400}
-                  className="object-cover w-full h-full hover:scale-110 transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-white">小売業</h3>
-              </div>
-              <div className="p-6">
-                <p className="text-gray-600">
-                  BtoCを中心にECサイト、Amazonなどのショッピングモール、実店舗などで販売を行っています。お客様のニーズに合わせた商品選定と、迅速かつ丁寧な対応を心がけています。
-                </p>
-                <div className="mt-4 flex justify-end">
-                  <div className="w-10 h-10">
-                    <Image src="/images/retail.svg" alt="小売業" width={40} height={40} />
+          {isClient && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-6xl mx-auto">
+              <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-primary hover:-translate-y-2">
+                <div className="relative h-48 overflow-hidden">
+                  <AnimatedImage
+                    src="/images/business/retail.jpg"
+                    alt="小売業"
+                    width={600}
+                    height={400}
+                    className="object-cover w-full h-full hover:scale-110 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-white">小売業</h3>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600">
+                    BtoCを中心にECサイト、Amazonなどのショッピングモール、実店舗などで販売を行っています。お客様のニーズに合わせた商品選定と、迅速かつ丁寧な対応を心がけています。
+                  </p>
+                  <div className="mt-4 flex justify-end">
+                    <div className="w-10 h-10">
+                      <Image src="/images/retail.svg" alt="小売業" width={40} height={40} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </AnimatedSection>
+              </AnimatedSection>
 
-            <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-secondary hover:-translate-y-2">
-              <div className="relative h-48 overflow-hidden">
-                <AnimatedImage
-                  src="/images/business/wholesale.jpg"
-                  alt="卸売業"
-                  width={600}
-                  height={400}
-                  className="object-cover w-full h-full hover:scale-110 transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-white">卸売業</h3>
-              </div>
-              <div className="p-6">
-                <p className="text-gray-600">
-                  商品を仕入れ、小売業へ卸売を行っています。新商品の開発や提案も行っています。高品質な商品を適正価格で提供することで、取引先様のビジネス成長をサポートしています。
-                </p>
-                <div className="mt-4 flex justify-end">
-                  <div className="w-10 h-10">
-                    <Image src="/images/wholesale.svg" alt="卸売業" width={40} height={40} />
+              <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-secondary hover:-translate-y-2">
+                <div className="relative h-48 overflow-hidden">
+                  <AnimatedImage
+                    src="/images/business/wholesale.jpg"
+                    alt="卸売業"
+                    width={600}
+                    height={400}
+                    className="object-cover w-full h-full hover:scale-110 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-white">卸売業</h3>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600">
+                    商品を仕入れ、小売業へ卸売を行っています。新商品の開発や提案も行っています。高品質な商品を適正価格で提供することで、取引先様のビジネス成長をサポートしています。
+                  </p>
+                  <div className="mt-4 flex justify-end">
+                    <div className="w-10 h-10">
+                      <Image src="/images/wholesale.svg" alt="卸売業" width={40} height={40} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </AnimatedSection>
+              </AnimatedSection>
 
-            <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-accent hover:-translate-y-2">
-              <div className="relative h-48 overflow-hidden">
-                <AnimatedImage
-                  src="/images/business/consulting.jpg"
-                  alt="コンサルティング事業"
-                  width={600}
-                  height={400}
-                  className="object-cover w-full h-full hover:scale-110 transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-white">コンサルティング事業</h3>
-              </div>
-              <div className="p-6">
-                <p className="text-gray-600">
-                  商品の仕入れや販売戦略の提案など、企業様の課題解決をサポートするコンサルティングを行っています。豊富な業界経験と専門知識を活かし、お客様のビジネス成長を総合的にサポートします。
-                </p>
-                <div className="mt-4 flex justify-end">
-                  <div className="w-10 h-10">
-                    <Image src="/images/consulting.svg" alt="コンサルティング" width={40} height={40} />
+              <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-accent hover:-translate-y-2">
+                <div className="relative h-48 overflow-hidden">
+                  <AnimatedImage
+                    src="/images/business/consulting.jpg"
+                    alt="コンサルティング事業"
+                    width={600}
+                    height={400}
+                    className="object-cover w-full h-full hover:scale-110 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-white">コンサルティング事業</h3>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600">
+                    商品の仕入れや販売戦略の提案など、企業様の課題解決をサポートするコンサルティングを行っています。豊富な業界経験と専門知識を活かし、お客様のビジネス成長を総合的にサポートします。
+                  </p>
+                  <div className="mt-4 flex justify-end">
+                    <div className="w-10 h-10">
+                      <Image src="/images/consulting.svg" alt="コンサルティング" width={40} height={40} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </AnimatedSection>
-          </div>
+              </AnimatedSection>
+            </div>
+          )}
+
+          {!isClient && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-6xl mx-auto">
+              <div className="h-96 animate-pulse rounded-2xl bg-gray-200"></div>
+              <div className="h-96 animate-pulse rounded-2xl bg-gray-200"></div>
+              <div className="h-96 animate-pulse rounded-2xl bg-gray-200"></div>
+            </div>
+          )}
         </div>
       </section>
 
