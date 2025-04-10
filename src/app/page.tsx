@@ -68,9 +68,11 @@ export default function Home() {
           </AnimatedHeader>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-6xl mx-auto">
+            {isClient ? (
+            <>
             <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-primary hover:-translate-y-2">
               <div className="relative h-48 overflow-hidden">
-                <AnimatedImage
+                <img
                   src="/images/business/retail.jpg"
                   alt="小売業"
                   width={600}
@@ -94,7 +96,7 @@ export default function Home() {
 
             <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-secondary hover:-translate-y-2">
               <div className="relative h-48 overflow-hidden">
-                <AnimatedImage
+                <img
                   src="/images/business/wholesale.jpg"
                   alt="卸売業"
                   width={600}
@@ -118,7 +120,7 @@ export default function Home() {
 
             <AnimatedSection className="overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 border-t-4 border-accent hover:-translate-y-2">
               <div className="relative h-48 overflow-hidden">
-                <AnimatedImage
+                <img
                   src="/images/business/consulting.jpg"
                   alt="コンサルティング事業"
                   width={600}
@@ -139,15 +141,15 @@ export default function Home() {
                 </div>
               </div>
             </AnimatedSection>
-          </div>
-
-          {!isClient && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-6xl mx-auto">
+            </>
+            ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-6xl mx-auto col-span-3">
               <div className="h-96 animate-pulse rounded-2xl bg-gray-200"></div>
               <div className="h-96 animate-pulse rounded-2xl bg-gray-200"></div>
               <div className="h-96 animate-pulse rounded-2xl bg-gray-200"></div>
             </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
 

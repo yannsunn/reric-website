@@ -31,7 +31,7 @@ const ClientOnlyMotion = React.forwardRef(({ children, ...props }: any, ref: any
   
   useEffect(() => {
     setIsMounted(true);
-    return () => setIsMounted(false);
+    // アンマウント時のクリーンアップは不要
   }, []);
   
   if (!isMounted) {
@@ -49,7 +49,7 @@ export default function AnimatedSection({ children, className = '', delay = 0 }:
   const [hasAnimated, setHasAnimated] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const mountedRef = useRef(false);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
     setIsMounted(true);
@@ -57,19 +57,23 @@ export default function AnimatedSection({ children, className = '', delay = 0 }:
     
     return () => {
       mountedRef.current = false;
-      setIsMounted(false);
+      // IntersectionObserverをクリーンアップ
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
     };
   }, []);
 
   useEffect(() => {
-    if (!isMounted || !sectionRef.current) return;
+    if (!isMounted || !sectionRef.current || !mountedRef.current) return;
 
     // まずは既存のオブザーバーをクリーンアップ
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
 
-    observerRef.current = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
         // コンポーネントがマウントされている場合のみstateを更新
@@ -90,19 +94,19 @@ export default function AnimatedSection({ children, className = '', delay = 0 }:
       }
     );
 
-    observerRef.current.observe(sectionRef.current);
+    observer.observe(sectionRef.current);
+    observerRef.current = observer;
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
+      if (observer) {
+        observer.disconnect();
       }
     };
   }, [controls, delay, hasAnimated, isMounted]);
 
   // 初期表示時は単純なdivでラップする（次のレンダリングでアニメーションが適用される）
   if (!isMounted) {
-    return <div className={`${className} opacity-0`}>{children}</div>;
+    return <div className={`${className}`}>{children}</div>;
   }
 
   return (
