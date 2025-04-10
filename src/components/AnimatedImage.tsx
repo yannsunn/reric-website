@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useRef } from 'react';
 import Image from 'next/image';
 import { motion, Variants, domAnimation, LazyMotion, useReducedMotion } from 'framer-motion';
 import { Component, ErrorInfo } from 'react';
@@ -73,6 +74,14 @@ export default function AnimatedImage({
     },
   };
 
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  const handleLoadingComplete = () => {
+    if (imageRef.current) {
+      // Handle image loading completion
+    }
+  };
+
   return (
     <AnimationErrorBoundary>
       <LazyMotion features={domAnimation}>
@@ -88,8 +97,10 @@ export default function AnimatedImage({
             alt={alt}
             width={width}
             height={height}
-            className={className}
+            className={`${className} w-auto h-auto`}
             priority={priority}
+            onLoad={handleLoadingComplete}
+            ref={imageRef}
           />
         </motion.div>
       </LazyMotion>

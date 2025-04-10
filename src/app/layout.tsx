@@ -7,11 +7,12 @@ export type Metadata = NextMetadata;
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "株式会社Reric",
-  description: "株式会社Rericは小売業・卸売業・コンサルティングを専門とし、顧客の成功と幸福を追求する企業です。",
+  title: "Reric株式会社",
+  description: "Reric株式会社のコーポレートサイトです。",
 };
 
 export default function RootLayout({
@@ -21,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={`${notoSansJp.className} antialiased`}>
+      <body className={notoSansJp.className} suppressHydrationWarning>
         {children}
       </body>
     </html>
