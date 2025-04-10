@@ -13,6 +13,7 @@ import HeaderNav from '@/components/HeaderNav';
 import MobileMenu from '@/components/MobileMenu';
 import ContactForm from '../components/ContactForm';
 import { useEffect, useState } from 'react';
+import Header from './header';
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
@@ -24,16 +25,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50">
       {/* ヘッダー */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.svg" alt="Reric Logo" width={40} height={40} />
-            <span className="text-lg md:text-xl font-bold">Reric</span>
-          </Link>
-          <HeaderNav />
-          <MobileMenu />
-        </div>
-      </header>
+      <Header />
 
       {/* ヒーローセクション */}
       <section id="vision" className="pt-32 pb-20 bg-gradient-to-b from-blue-50 to-white relative overflow-hidden">
