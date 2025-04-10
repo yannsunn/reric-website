@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from '@/components/Image';
 
 export default function Error({
   error,
@@ -17,32 +17,31 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 via-white to-blue-50">
-      <div className="text-center max-w-lg px-6 py-16">
-        <div className="flex justify-center mb-6">
-          <Image src="/logo.svg" alt="Reric Logo" width={80} height={80} />
-        </div>
-        
-        <h1 className="text-4xl font-bold text-primary mb-4">エラーが発生しました</h1>
-        
-        <p className="text-gray-600 mb-8">
-          申し訳ありませんが、サイトの表示中に問題が発生しました。
-          もう一度試すか、ホームページに戻ってください。
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white p-4">
+      <div className="text-center">
+        <OptimizedImage
+          src="/logo.png"
+          alt="株式会社エリック"
+          width={100}
+          height={100}
+          className="mx-auto mb-6"
+        />
+        <h1 className="text-3xl font-bold text-primary mb-4">エラーが発生しました</h1>
+        <p className="text-gray-600 mb-8 max-w-md mx-auto">
+          申し訳ありませんが、問題が発生しました。もう一度お試しいただくか、ホームページに戻ってください。
         </p>
-        
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={reset}
-            className="w-full sm:w-auto bg-secondary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+            className="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors"
           >
             もう一度試す
           </button>
-          
-          <Link 
-            href="/" 
-            className="w-full sm:w-auto bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+          <Link
+            href="/"
+            className="border border-primary text-primary hover:bg-primary/10 font-medium py-2 px-6 rounded-lg transition-colors"
           >
-            ホームに戻る
+            ホームページに戻る
           </Link>
         </div>
       </div>

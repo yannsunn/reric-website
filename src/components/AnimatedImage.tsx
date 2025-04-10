@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from 'react';
-import Image from 'next/image';
 import { motion, Variants, domAnimation, LazyMotion, useReducedMotion } from 'framer-motion';
 import { Component, ErrorInfo } from 'react';
 
@@ -62,6 +61,7 @@ const ClientOnlyMotion = React.forwardRef(({ children, ...props }: any, ref: any
   
   useEffect(() => {
     setIsMounted(true);
+    return () => setIsMounted(false);
   }, []);
   
   if (!isMounted) {
@@ -86,6 +86,7 @@ export default function AnimatedImage({
 
   useEffect(() => {
     setIsMounted(true);
+    return () => setIsMounted(false);
   }, []);
 
   const reducedMotionVariants: Variants = {
@@ -106,15 +107,9 @@ export default function AnimatedImage({
 
   if (!isMounted) {
     return (
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        className={className}
-        priority={priority}
-        onLoadingComplete={handleLoadingComplete}
-      />
+      <div className={`relative ${className}`} style={{ aspectRatio: `${width}/${height}` }}>
+        <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+      </div>
     );
   }
 
@@ -127,15 +122,16 @@ export default function AnimatedImage({
           variants={shouldReduceMotion ? reducedMotionVariants : imageVariants}
           whileHover={shouldReduceMotion ? {} : { scale: 1.03, transition: { duration: 0.3 } }}
           aria-live="polite"
+          className={`relative ${className}`}
         >
-          <Image
+          <img
             src={src}
             alt={alt}
             width={width}
             height={height}
-            className={className}
-            priority={priority}
-            onLoadingComplete={handleLoadingComplete}
+            ref={imageRef}
+            className="w-full h-full object-cover"
+            onLoad={handleLoadingComplete}
           />
         </ClientOnlyMotion>
       </LazyMotion>

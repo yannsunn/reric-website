@@ -31,6 +31,7 @@ const ClientOnlyMotion = React.forwardRef(({ children, ...props }: any, ref: any
   
   useEffect(() => {
     setIsMounted(true);
+    return () => setIsMounted(false);
   }, []);
   
   if (!isMounted) {
@@ -44,52 +45,70 @@ ClientOnlyMotion.displayName = 'ClientOnlyMotion';
 
 export default function AnimatedSection({ children, className = '', delay = 0 }: AnimatedSectionProps) {
   const controls = useAnimation();
-  const ref = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const mountedRef = useRef(false);
 
   useEffect(() => {
     setIsMounted(true);
+    mountedRef.current = true;
+    
+    return () => {
+      mountedRef.current = false;
+      setIsMounted(false);
+    };
   }, []);
 
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || !sectionRef.current) return;
 
-    const currentRef = ref.current;
-    const observer = new IntersectionObserver(
+    // まずは既存のオブザーバーをクリーンアップ
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observerRef.current = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (entry.isIntersecting && !hasAnimated) {
+        // コンポーネントがマウントされている場合のみstateを更新
+        if (entry.isIntersecting && !hasAnimated && mountedRef.current) {
           setTimeout(() => {
-            controls.start('visible');
-            setHasAnimated(true);
+            if (mountedRef.current) {
+              controls.start('visible').catch(() => {
+                // アニメーションエラーを防止（コンポーネントがアンマウントされた場合など）
+              });
+              setHasAnimated(true);
+            }
           }, delay);
         }
       },
       {
         threshold: 0.1,
+        rootMargin: '0px 0px -10% 0px', // より早くトリガーするために上部と水平方向のマージンを調整
       }
     );
 
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    observerRef.current.observe(sectionRef.current);
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
       }
     };
   }, [controls, delay, hasAnimated, isMounted]);
 
+  // 初期表示時は単純なdivでラップする（次のレンダリングでアニメーションが適用される）
   if (!isMounted) {
-    return <div className={className}>{children}</div>;
+    return <div className={`${className} opacity-0`}>{children}</div>;
   }
 
   return (
     <LazyMotion features={domAnimation}>
       <ClientOnlyMotion
-        ref={ref}
+        ref={sectionRef}
         initial="hidden"
         animate={controls}
         variants={sectionVariants}
