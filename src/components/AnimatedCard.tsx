@@ -1,13 +1,15 @@
 "use client";
 
 import { motion, Variants, domAnimation, LazyMotion, useReducedMotion } from 'framer-motion';
-import { ReactNode, Component, ErrorInfo } from 'react';
+import { ReactNode, Component, ErrorInfo, useEffect, useState } from 'react';
 import { FC } from 'react';
+import Image from 'next/image';
 
 interface AnimatedCardProps {
   title: string;
   description: string;
-  icon: string;
+  icon?: string;
+  iconSrc?: string;
   className?: string;
 }
 
@@ -44,16 +46,15 @@ const cardVariants: Variants = {
     y: 30,
     scale: 0.95,
   },
-  visible: (delay: number) => ({
+  visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
       duration: 0.7,
-      delay: delay * 0.2,
       ease: 'easeOut',
     },
-  }),
+  },
   hover: {
     y: -10,
     boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
@@ -63,13 +64,34 @@ const cardVariants: Variants = {
   },
 };
 
-export const AnimatedCard: FC<AnimatedCardProps> = ({
+// サーバーサイドレンダリングの問題を回避するラッパー
+const ClientOnlyMotion = ({ children, ...props }: any) => {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  if (!isMounted) {
+    return <div className="motion-placeholder">{children}</div>;
+  }
+  
+  return <motion.div {...props}>{children}</motion.div>;
+};
+
+const AnimatedCard: FC<AnimatedCardProps> = ({
   title,
   description,
   icon,
+  iconSrc,
   className = '',
 }) => {
   const shouldReduceMotion = useReducedMotion();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const reducedMotionVariants: Variants = {
     hidden: { opacity: 0 },
@@ -82,20 +104,57 @@ export const AnimatedCard: FC<AnimatedCardProps> = ({
     }
   };
 
+  // アイコンコンポーネントを切り替え
+  const IconComponent = () => {
+    if (iconSrc) {
+      return (
+        <div className="w-24 h-24 mx-auto mb-6 text-primary">
+          <img src={iconSrc} alt={title} className="w-full h-full" />
+        </div>
+      );
+    } else if (icon) {
+      return (
+        <div className="w-full h-48 mb-6 overflow-hidden rounded-lg">
+          <Image
+            src={icon}
+            alt={title}
+            width={800}
+            height={600}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      );
+    }
+    return null;
+  };
+
+  if (!isMounted) {
+    return (
+      <div className={`bg-white p-8 rounded-2xl shadow-lg ${className}`}>
+        <IconComponent />
+        <h3 className="text-2xl font-bold mb-4 text-primary">{title}</h3>
+        <p className="text-gray-600">{description}</p>
+      </div>
+    );
+  }
+
   return (
     <AnimationErrorBoundary>
       <LazyMotion features={domAnimation}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+        <ClientOnlyMotion
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          variants={shouldReduceMotion ? reducedMotionVariants : cardVariants}
           className={`bg-white p-8 rounded-2xl shadow-lg ${className}`}
         >
-          <div className="text-4xl mb-6 text-center">{icon}</div>
-          <h3 className="text-2xl font-bold mb-4 text-center text-gray-800">{title}</h3>
-          <p className="text-gray-600 leading-relaxed">{description}</p>
-        </motion.div>
+          <IconComponent />
+          <h3 className="text-2xl font-bold mb-4 text-primary">{title}</h3>
+          <p className="text-gray-600">{description}</p>
+        </ClientOnlyMotion>
       </LazyMotion>
     </AnimationErrorBoundary>
   );
-}; 
+};
+
+export default AnimatedCard; 

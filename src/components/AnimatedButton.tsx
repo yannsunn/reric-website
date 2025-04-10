@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants, domAnimation, LazyMotion, useReducedMotion } from 'framer-motion';
-import { Component, ErrorInfo, MouseEvent, ReactNode } from 'react';
+import { Component, ErrorInfo, MouseEvent, ReactNode, useEffect, useState } from 'react';
 
 interface AnimatedButtonProps {
   children: ReactNode;
@@ -9,6 +9,8 @@ interface AnimatedButtonProps {
   type?: 'button' | 'submit' | 'reset';
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
+  id?: string;
+  name?: string;
 }
 
 interface ErrorBoundaryState {
@@ -56,14 +58,36 @@ const buttonVariants: Variants = {
   },
 };
 
+// サーバーサイドレンダリングの問題を回避するラッパー
+const ClientOnlyMotion = ({ children, ...props }: any) => {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  if (!isMounted) {
+    return <button className="motion-placeholder">{children}</button>;
+  }
+  
+  return <motion.button {...props}>{children}</motion.button>;
+};
+
 export default function AnimatedButton({
   children,
   className = '',
   type = 'button',
   onClick,
   disabled = false,
+  id,
+  name,
 }: AnimatedButtonProps) {
   const shouldReduceMotion = useReducedMotion();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const reducedMotionVariants: Variants = {
     initial: { scale: 1 },
@@ -71,10 +95,25 @@ export default function AnimatedButton({
     tap: { opacity: 0.7 },
   };
 
+  if (!isMounted) {
+    return (
+      <button
+        className={className}
+        type={type}
+        onClick={onClick}
+        disabled={disabled}
+        id={id}
+        name={name}
+      >
+        {children}
+      </button>
+    );
+  }
+
   return (
     <AnimationErrorBoundary>
       <LazyMotion features={domAnimation}>
-        <motion.button
+        <ClientOnlyMotion
           initial="initial"
           whileHover="hover"
           whileTap="tap"
@@ -84,9 +123,11 @@ export default function AnimatedButton({
           onClick={onClick}
           disabled={disabled}
           aria-live="polite"
+          id={id}
+          name={name}
         >
           {children}
-        </motion.button>
+        </ClientOnlyMotion>
       </LazyMotion>
     </AnimationErrorBoundary>
   );

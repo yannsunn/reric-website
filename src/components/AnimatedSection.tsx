@@ -24,12 +24,34 @@ const sectionVariants: Variants = {
   },
 };
 
+// サーバーサイドレンダリングの問題を回避するラッパー
+const ClientOnlyMotion = ({ children, ...props }: any) => {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  if (!isMounted) {
+    return <div className="motion-placeholder">{children}</div>;
+  }
+  
+  return <motion.div {...props}>{children}</motion.div>;
+};
+
 export default function AnimatedSection({ children, className = '', delay = 0 }: AnimatedSectionProps) {
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const currentRef = ref.current;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -55,11 +77,15 @@ export default function AnimatedSection({ children, className = '', delay = 0 }:
         observer.unobserve(currentRef);
       }
     };
-  }, [controls, delay, hasAnimated]);
+  }, [controls, delay, hasAnimated, isMounted]);
+
+  if (!isMounted) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <LazyMotion features={domAnimation}>
-      <motion.div
+      <ClientOnlyMotion
         ref={ref}
         initial="hidden"
         animate={controls}
@@ -67,7 +93,7 @@ export default function AnimatedSection({ children, className = '', delay = 0 }:
         className={className}
       >
         {children}
-      </motion.div>
+      </ClientOnlyMotion>
     </LazyMotion>
   );
 } 

@@ -46,13 +46,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: var(--primary-color);
+  color: theme('colors.primary');
   text-decoration: none;
   transition: color 0.3s;
 }
 
 a:hover {
-  color: #2c88a0;
+  color: theme('colors.secondary');
 }
 
 .container {
@@ -64,15 +64,15 @@ a:hover {
 
 @layer components {
   .btn-primary {
-    @apply bg-[#1a5f7a] text-white px-6 py-2 rounded-lg hover:bg-[#2c88a0] transition-colors;
+    @apply bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors;
   }
   
   .btn-secondary {
-    @apply bg-[#f5a623] text-white px-6 py-2 rounded-lg hover:bg-[#e69512] transition-colors;
+    @apply bg-accent text-white px-6 py-2 rounded-lg hover:bg-[#e69512] transition-colors;
   }
   
   .section-title {
-    @apply text-3xl font-bold text-[#1a5f7a] mb-6;
+    @apply text-3xl font-bold text-primary mb-6;
   }
   
   .card {
@@ -80,7 +80,7 @@ a:hover {
   }
   
   .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a5f7a] focus:border-transparent;
+    @apply w-full px-4 py-2 border border-mediumGray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent;
   }
 }
 
@@ -106,14 +106,14 @@ a:hover {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: theme('colors.lightGray');
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1a5f7a;
+  background: theme('colors.primary');
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2c88a0;
+  background: theme('colors.secondary');
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion, Variants, domAnimation, LazyMotion, useReducedMotion } from 'framer-motion';
 import { Component, ErrorInfo } from 'react';
@@ -56,6 +56,21 @@ const imageVariants: Variants = {
   },
 };
 
+// サーバーサイドレンダリングの問題を回避するラッパー
+const ClientOnlyMotion = ({ children, ...props }: any) => {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  if (!isMounted) {
+    return <div className="motion-placeholder">{children}</div>;
+  }
+  
+  return <motion.div {...props}>{children}</motion.div>;
+};
+
 export default function AnimatedImage({
   src,
   alt,
@@ -65,6 +80,11 @@ export default function AnimatedImage({
   priority = false,
 }: AnimatedImageProps) {
   const shouldReduceMotion = useReducedMotion();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const reducedMotionVariants: Variants = {
     hidden: { opacity: 0 },
@@ -82,10 +102,24 @@ export default function AnimatedImage({
     }
   };
 
+  if (!isMounted) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className={`${className} w-auto h-auto`}
+        priority={priority}
+        onLoadingComplete={handleLoadingComplete}
+      />
+    );
+  }
+
   return (
     <AnimationErrorBoundary>
       <LazyMotion features={domAnimation}>
-        <motion.div
+        <ClientOnlyMotion
           initial="hidden"
           animate="visible"
           variants={shouldReduceMotion ? reducedMotionVariants : imageVariants}
@@ -99,10 +133,9 @@ export default function AnimatedImage({
             height={height}
             className={`${className} w-auto h-auto`}
             priority={priority}
-            onLoad={handleLoadingComplete}
-            ref={imageRef}
+            onLoadingComplete={handleLoadingComplete}
           />
-        </motion.div>
+        </ClientOnlyMotion>
       </LazyMotion>
     </AnimationErrorBoundary>
   );

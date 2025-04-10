@@ -1,12 +1,6 @@
-<svg width="400" height="250" viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="250" fill="#f3f4f6" />
-  <rect x="50" y="50" width="300" height="150" rx="5" fill="#ffffff" stroke="#0056b3" stroke-width="2" />
-  <rect x="70" y="70" width="100" height="80" rx="3" fill="#e6f0ff" stroke="#0056b3" stroke-width="1" />
-  <rect x="190" y="70" width="140" height="30" rx="3" fill="#e6f0ff" stroke="#0056b3" stroke-width="1" />
-  <rect x="190" y="120" width="140" height="30" rx="3" fill="#e6f0ff" stroke="#0056b3" stroke-width="1" />
-  <path d="M120 110 L120 130 L95 120 Z" fill="#0056b3" />
-  <circle cx="320" cy="180" r="15" fill="#ffc107" />
-  <text x="200" y="210" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">
-    ネット販売イメージ
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 3h18v18H3z"/>
+  <path d="M3 9h18"/>
+  <path d="M9 21V9"/>
+  <path d="M15 21V9"/>
 </svg> 

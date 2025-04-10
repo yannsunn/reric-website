@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants, domAnimation, LazyMotion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import React from 'react';
 
 interface AnimatedHeaderProps {
@@ -25,16 +25,40 @@ const headerVariants: Variants = {
   },
 };
 
+// サーバーサイドレンダリングの問題を回避するラッパー
+const ClientOnlyMotion = ({ children, ...props }: any) => {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  if (!isMounted) {
+    return <div className="motion-placeholder">{children}</div>;
+  }
+  
+  return <motion.div {...props}>{children}</motion.div>;
+};
+
 export default function AnimatedHeader({ 
   children, 
   className = '', 
   level = 2 
 }: AnimatedHeaderProps) {
+  const [isMounted, setIsMounted] = useState(false);
   const HeaderTag = `h${level}` as keyof React.JSX.IntrinsicElements;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <HeaderTag className={className}>{children}</HeaderTag>;
+  }
 
   return (
     <LazyMotion features={domAnimation}>
-      <motion.div
+      <ClientOnlyMotion
         initial="hidden"
         animate="visible"
         variants={headerVariants}
@@ -42,7 +66,7 @@ export default function AnimatedHeader({
         <HeaderTag className={className}>
           {children}
         </HeaderTag>
-      </motion.div>
+      </ClientOnlyMotion>
     </LazyMotion>
   );
 } 

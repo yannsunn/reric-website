@@ -6,8 +6,8 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
-  output: 'export',
   images: {
+    domains: ['images.unsplash.com'],
     unoptimized: true,
   },
   trailingSlash: true,
@@ -15,6 +15,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  output: 'export',
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
