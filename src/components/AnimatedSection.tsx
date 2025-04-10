@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, Variants, domAnimation, LazyMotion } from 'framer-motion';
+import React from 'react';
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -25,7 +26,7 @@ const sectionVariants: Variants = {
 };
 
 // サーバーサイドレンダリングの問題を回避するラッパー
-const ClientOnlyMotion = ({ children, ...props }: any) => {
+const ClientOnlyMotion = React.forwardRef(({ children, ...props }: any, ref: any) => {
   const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
@@ -36,8 +37,10 @@ const ClientOnlyMotion = ({ children, ...props }: any) => {
     return <div className="motion-placeholder">{children}</div>;
   }
   
-  return <motion.div {...props}>{children}</motion.div>;
-};
+  return <motion.div ref={ref} {...props}>{children}</motion.div>;
+});
+
+ClientOnlyMotion.displayName = 'ClientOnlyMotion';
 
 export default function AnimatedSection({ children, className = '', delay = 0 }: AnimatedSectionProps) {
   const controls = useAnimation();

@@ -57,7 +57,7 @@ const imageVariants: Variants = {
 };
 
 // サーバーサイドレンダリングの問題を回避するラッパー
-const ClientOnlyMotion = ({ children, ...props }: any) => {
+const ClientOnlyMotion = React.forwardRef(({ children, ...props }: any, ref: any) => {
   const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
@@ -68,8 +68,10 @@ const ClientOnlyMotion = ({ children, ...props }: any) => {
     return <div className="motion-placeholder">{children}</div>;
   }
   
-  return <motion.div {...props}>{children}</motion.div>;
-};
+  return <motion.div ref={ref} {...props}>{children}</motion.div>;
+});
+
+ClientOnlyMotion.displayName = 'ClientOnlyMotion';
 
 export default function AnimatedImage({
   src,
@@ -109,7 +111,7 @@ export default function AnimatedImage({
         alt={alt}
         width={width}
         height={height}
-        className={`${className} w-auto h-auto`}
+        className={className}
         priority={priority}
         onLoadingComplete={handleLoadingComplete}
       />
@@ -131,7 +133,7 @@ export default function AnimatedImage({
             alt={alt}
             width={width}
             height={height}
-            className={`${className} w-auto h-auto`}
+            className={className}
             priority={priority}
             onLoadingComplete={handleLoadingComplete}
           />
