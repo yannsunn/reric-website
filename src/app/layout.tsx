@@ -1,42 +1,33 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import './globals.css'
+import { Noto_Sans_JP, Noto_Serif_JP } from 'next/font/google'
 
-const inter = Inter({ subsets: ["latin"] });
+const notoSans = Noto_Sans_JP({
+  subsets: ['latin'],
+  variable: '--font-noto-sans',
+  weight: ['400', '700'],
+})
 
-export const metadata: Metadata = {
-  title: "株式会社Reric",
-  description: "株式会社Rericのコーポレートサイトです。",
-  metadataBase: new URL('https://reric.jp'),
-  openGraph: {
-    title: '株式会社Reric',
-    description: '株式会社Rericのコーポレートサイトです。',
-    url: 'https://reric.jp',
-    siteName: 'RERIC',
-    locale: 'ja_JP',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: '株式会社Reric',
-    description: '株式会社Rericのコーポレートサイトです。',
-  }
-};
+const notoSerif = Noto_Serif_JP({
+  subsets: ['latin'],
+  variable: '--font-noto-serif',
+  weight: ['400', '700'],
+})
+
+export const metadata = {
+  title: 'Reric Corporation',
+  description: 'Reric Corporation - Building the future of technology',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="ja">
-      <head>
-        <meta
-          httpEquiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com https://www.google-analytics.com https://*.google-analytics.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com; frame-src 'self' https://www.google-analytics.com;"
-        />
-      </head>
-      <body className={inter.className}>{children}</body>
+    <html lang="ja" className={`${notoSans.variable} ${notoSerif.variable}`}>
+      <body className="font-sans">
+        {children}
+      </body>
     </html>
-  );
+  )
 }

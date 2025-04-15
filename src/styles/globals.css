@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .nav-link {
+    @apply text-gray-800 hover:text-primary transition-colors duration-200;
+  }
+
+  .btn-accent {
+    @apply bg-[#f5a623] text-white hover:bg-[#f5a623]/90;
+  }
+} 

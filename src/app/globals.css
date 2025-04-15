@@ -4,7 +4,7 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 240, 245, 255;
+  --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
   --primary-color: #1a5f7a;
   --secondary-color: #2c88a0;
@@ -25,6 +25,9 @@
 
 html {
   scroll-behavior: smooth;
+  font-feature-settings: "palt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -36,84 +39,168 @@ body {
     )
     rgb(var(--background-start-rgb));
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 1rem;
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
 }
 
 a {
   color: theme('colors.primary');
   text-decoration: none;
-  transition: color 0.3s;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 a:hover {
   color: theme('colors.secondary');
 }
 
+a.underline-hover::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: right;
+}
+
+a.underline-hover:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
+}
+
+@layer base {
+  body {
+    @apply text-gray-900 bg-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-bold;
+  }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors;
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
-  .btn-secondary {
-    @apply bg-accent text-white px-6 py-2 rounded-lg hover:bg-[#e69512] transition-colors;
+
+  .section {
+    @apply py-20 sm:py-28;
   }
-  
+
   .section-title {
-    @apply text-3xl font-bold text-primary mb-6;
+    @apply text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-center mb-16 relative;
   }
-  
+
+  .section-title::after {
+    content: '';
+    @apply absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary to-secondary;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+
+  .btn {
+    @apply inline-flex items-center px-8 py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-secondary text-white hover:from-secondary hover:to-primary shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-white;
+  }
+
   .card {
-    @apply bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow;
+    @apply bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1;
   }
   
   .input-field {
-    @apply w-full px-4 py-2 border border-mediumGray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent;
+    @apply w-full px-6 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300;
   }
 }
 
-/* 物流系のアニメーション */
-@keyframes slideIn {
+/* アニメーション */
+@keyframes fadeInUp {
   from {
+    opacity: 0;
     transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
     opacity: 0;
   }
   to {
-    transform: translateY(0);
     opacity: 1;
   }
 }
 
-.animate-slide-in {
-  animation: slideIn 0.5s ease-out forwards;
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-/* 物流系のカスタムスクロールバー */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+/* スクロールバー */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: theme('colors.lightGray');
+  background: rgb(243, 244, 246);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: theme('colors.primary');
-  border-radius: 4px;
+  background: linear-gradient(to bottom, theme('colors.primary'), theme('colors.secondary'));
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: theme('colors.secondary');
+  background: linear-gradient(to bottom, theme('colors.secondary'), theme('colors.primary'));
 }

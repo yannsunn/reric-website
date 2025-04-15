@@ -1,207 +1,117 @@
 'use client';
 
-import { useState } from 'react';
-import { AnimatedButton } from '@/components';
+import React, { useState } from 'react';
 
-const ContactForm = () => {
-  const [formData, setFormData] = useState({
+interface FormState {
+  name: string;
+  email: string;
+  message: string;
+  isSubmitting: boolean;
+  isSubmitted: boolean;
+  error: string | null;
+}
+
+export default function ContactForm() {
+  const [formState, setFormState] = useState<FormState>({
     name: '',
     email: '',
-    phone: '',
-    subject: '',
-    message: ''
-  });
-  
-  const [formStatus, setFormStatus] = useState({
+    message: '',
     isSubmitting: false,
     isSubmitted: false,
-    isError: false,
-    message: ''
+    error: null,
   });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name.replace('contact-', '')]: value
-    }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    setFormStatus({
-      isSubmitting: true,
-      isSubmitted: false,
-      isError: false,
-      message: '送信中...'
-    });
-    
+    setFormState(prev => ({ ...prev, isSubmitting: true, error: null }));
+
     try {
-      // TODO: 実際のフォーム送信処理を実装
-      // 例: await fetch('/api/contact', {
-      //   method: 'POST',
-      //   body: JSON.stringify(formData)
-      // });
-      
-      // デモ用の遅延
+      // ここに実際のフォーム送信処理を実装
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setFormStatus({
+      setFormState(prev => ({
+        ...prev,
         isSubmitting: false,
         isSubmitted: true,
-        isError: false,
-        message: 'お問い合わせを受け付けました。担当者より折り返しご連絡いたします。'
-      });
-      
-      // フォームをリセット
-      setFormData({
         name: '',
         email: '',
-        phone: '',
-        subject: '',
-        message: ''
-      });
-      
+        message: '',
+      }));
     } catch (error) {
-      console.error('送信エラー:', error);
-      setFormStatus({
+      setFormState(prev => ({
+        ...prev,
         isSubmitting: false,
-        isSubmitted: false,
-        isError: true,
-        message: '送信に失敗しました。時間をおいて再度お試しください。'
-      });
+        error: '送信に失敗しました。もう一度お試しください。',
+      }));
     }
   };
 
-  return (
-    <>
-      {formStatus.isSubmitted ? (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-          <svg className="w-12 h-12 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <h3 className="text-xl font-bold text-green-800 mb-2">送信完了</h3>
-          <p className="text-green-700">{formStatus.message}</p>
-          <button 
-            onClick={() => setFormStatus(prev => ({ ...prev, isSubmitted: false }))}
-            className="mt-4 bg-white text-primary border border-primary px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            新しいお問い合わせ
-          </button>
-        </div>
-      ) : (
-        <form className="space-y-6" id="contact-form" name="contact-form" onSubmit={handleSubmit}>
-          {formStatus.isError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-              <p className="text-red-700">{formStatus.message}</p>
-            </div>
-          )}
-          
-          <div>
-            <label htmlFor="contact-name" className="block text-base font-medium text-gray-700 mb-2">
-              お名前 <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="contact-name"
-              name="contact-name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              autoComplete="name"
-              className="w-full px-4 py-3 text-base border border-mediumGray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              placeholder="例：山田 太郎"
-              disabled={formStatus.isSubmitting}
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="contact-email" className="block text-base font-medium text-gray-700 mb-2">
-              メールアドレス <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              id="contact-email"
-              name="contact-email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              autoComplete="email"
-              className="w-full px-4 py-3 text-base border border-mediumGray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              placeholder="例：example@example.com"
-              disabled={formStatus.isSubmitting}
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="contact-phone" className="block text-base font-medium text-gray-700 mb-2">
-              電話番号
-            </label>
-            <input
-              type="tel"
-              id="contact-phone"
-              name="contact-phone"
-              value={formData.phone}
-              onChange={handleChange}
-              autoComplete="tel"
-              className="w-full px-4 py-3 text-base border border-mediumGray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              placeholder="例：090-1234-5678"
-              disabled={formStatus.isSubmitting}
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="contact-subject" className="block text-base font-medium text-gray-700 mb-2">
-              件名 <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="contact-subject"
-              name="contact-subject"
-              value={formData.subject}
-              onChange={handleChange}
-              required
-              autoComplete="off"
-              className="w-full px-4 py-3 text-base border border-mediumGray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              placeholder="例：商品について"
-              disabled={formStatus.isSubmitting}
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="contact-message" className="block text-base font-medium text-gray-700 mb-2">
-              お問い合わせ内容 <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="contact-message"
-              name="contact-message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows={5}
-              autoComplete="off"
-              className="w-full px-4 py-3 text-base border border-mediumGray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              placeholder="お問い合わせ内容を入力してください"
-              disabled={formStatus.isSubmitting}
-            ></textarea>
-          </div>
-          
-          <div className="text-center pt-4">
-            <AnimatedButton
-              type="submit"
-              id="contact-submit"
-              name="contact-submit"
-              className="btn-primary w-full sm:w-auto px-8 py-3 text-lg font-semibold"
-              disabled={formStatus.isSubmitting}
-            >
-              {formStatus.isSubmitting ? '送信中...' : '送信する'}
-            </AnimatedButton>
-          </div>
-        </form>
-      )}
-    </>
-  );
-};
+  if (formState.isSubmitted) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-green-600 font-medium text-lg">
+          お問い合わせありがとうございます。<br />
+          内容を確認次第、担当者よりご連絡させていただきます。
+        </p>
+      </div>
+    );
+  }
 
-export default ContactForm; 
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          お名前 <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="name"
+          required
+          value={formState.name}
+          onChange={e => setFormState(prev => ({ ...prev, name: e.target.value }))}
+          className="input-field"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          メールアドレス <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="email"
+          id="email"
+          required
+          value={formState.email}
+          onChange={e => setFormState(prev => ({ ...prev, email: e.target.value }))}
+          className="input-field"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+          お問い合わせ内容 <span className="text-red-500">*</span>
+        </label>
+        <textarea
+          id="message"
+          required
+          rows={5}
+          value={formState.message}
+          onChange={e => setFormState(prev => ({ ...prev, message: e.target.value }))}
+          className="input-field"
+        />
+      </div>
+
+      {formState.error && (
+        <p className="text-red-500 text-sm">{formState.error}</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={formState.isSubmitting}
+        className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
+      >
+        {formState.isSubmitting ? '送信中...' : '送信する'}
+      </button>
+    </form>
+  );
+} 

@@ -1,59 +1,44 @@
 'use client';
 
-import NextImage, { ImageProps } from 'next/image';
 import { useState } from 'react';
+import Image, { ImageProps } from 'next/image';
 
-interface OptimizedImageProps extends Omit<ImageProps, 'style'> {
-  fallback?: string;
-  preserveAspectRatio?: boolean;
-  style?: React.CSSProperties;
-}
+type OptimizedImageProps = ImageProps & {
+  fallbackSrc?: string;
+};
 
-export default function OptimizedImage({
-  src,
-  alt,
-  width,
-  height,
-  className = '',
-  fallback = '/images/placeholder.jpg',
-  preserveAspectRatio = true,
-  style,
-  fill,
-  ...props
-}: OptimizedImageProps) {
-  const [error, setError] = useState(false);
-  
-  // fillプロパティがある場合は別のロジックで処理する
-  if (fill) {
-    return (
-      <NextImage
-        src={error ? fallback : src}
-        alt={alt}
-        fill={fill}
-        className={className}
-        onError={() => setError(true)}
-        {...props}
-      />
-    );
-  }
-  
-  // fillがない場合は通常のロジックを使用
-  const finalStyle = preserveAspectRatio ? {
-    ...style,
-    width: 'auto',
-    height: 'auto',
-  } : style;
+export const OptimizedImage = ({ src, fallbackSrc = '/images/common/placeholder.png', alt, ...props }: OptimizedImageProps) => {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    if (!hasError) {
+      setHasError(true);
+      setImgSrc(fallbackSrc);
+    }
+  };
 
   return (
-    <NextImage
-      src={error ? fallback : src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      style={finalStyle}
-      onError={() => setError(true)}
+    <Image
       {...props}
+      src={imgSrc}
+      alt={alt}
+      onError={handleError}
+      style={{ 
+        objectFit: props.style?.objectFit || 'cover' as const,
+        width: props.style?.width || 'auto',
+        height: props.style?.height || 'auto',
+        ...props.style
+      }}
     />
   );
-} 
+};
+
+export const AnimatedImage = (props: OptimizedImageProps) => {
+  return (
+    <OptimizedImage
+      {...props}
+      className={`transition-transform duration-500 ${props.className || ''}`}
+    />
+  );
+}; 

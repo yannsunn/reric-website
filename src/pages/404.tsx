@@ -1,19 +1,15 @@
 import Link from 'next/link';
-import { Layout } from '@components/Layout';
 
 export default function Custom404() {
   return (
-    <Layout>
-      <div className="min-h-screen flex flex-col items-center justify-center px-4">
-        <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-8">ページが見つかりませんでした</p>
-        <Link 
-          href="/" 
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
-        >
-          ホームページへ戻る
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="text-center text-white">
+        <h1 className="text-6xl font-bold mb-4">404</h1>
+        <p className="text-xl mb-8">ページが見つかりませんでした</p>
+        <Link href="/" className="inline-block bg-white text-primary px-8 py-3 rounded-full hover:bg-opacity-90 transition-all">
+          トップページへ戻る
         </Link>
       </div>
-    </Layout>
+    </div>
   );
 } 
