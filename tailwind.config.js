@@ -12,9 +12,9 @@ module.exports = {
         serif: ['var(--font-noto-serif)'],
       },
       colors: {
-        primary: '#1a237e',
-        secondary: '#0d47a1',
-        accent: '#00bcd4',
+        primary: 'var(--primary-color)',
+        secondary: 'var(--secondary-color)',
+        accent: 'var(--accent-color)',
         neutral: {
           50: '#f8fafc',
           100: '#f1f5f9',
